@@ -1,0 +1,171 @@
+host: "0.0.0.0"
+port: 3000
+app_key: app-key
+debug: false
+locale: zh-CN
+timezone: Asia/Shanghai
+site_default: site-default
+site_url: site-url
+login_timeout: 259200
+
+db:
+  type: pgsql
+  name: pg-name
+  host: pg-host
+  port: pg-port
+  user: pg-user
+  password: pg-password
+  charset: utf8mb4
+  table_prefix: "artalk_"
+  ssl: false
+  prepare_stmt: true
+
+http:
+  body_limit: 100
+  proxy_header: ""
+
+log:
+  enabled: true
+  filename: /data/artalk.log
+
+cache:
+  enabled: true
+  type: builtin
+  expires: 30
+  warm_up: false
+  server: ""
+  redis:
+    network: tcp
+    username: ""
+    password: ""
+    db: 0
+
+trusted_domains:
+  - site-url
+
+ssl:
+  enabled: false
+  cert_path: ""
+  key_path: ""
+
+admin_users:
+  - name: "admin"
+    email: "admin-email"
+    password: "(bcrypt)admin-password"
+    badge_name: "管理员"
+    badge_color: "#0083FF"
+
+moderator:
+  pending_default: false
+  api_fail_block: false
+  akismet_key: ""
+  keywords:
+    enabled: false
+    pending: false
+    files:
+      - /data/dict/all.txt
+      - /data/dict/discrimination.txt
+      - /data/dict/drugs.txt
+      - /data/dict/gambling.txt
+      - /data/dict/political.txt
+      - /data/dict/pornography.txt
+      - /data/dict/profanity.txt
+      - /data/dict/scam.txt
+      - /data/dict/violence.txt
+    file_sep: "\n"
+    replace_to: "*"
+
+captcha:
+  enabled: false
+  always: false
+  captcha_type: turnstile
+  action_limit: 3
+  action_reset: 60
+  turnstile:
+    site_key: ""
+    secret_key: ""
+
+ip_region:
+  enabled: false
+  db_path: /data/ip2region.xdb
+  precision: province
+
+img_upload:
+  enabled: false
+  path: /data/artalk-img/
+  max_size: 5
+  public_path: null
+  upgit:
+    enabled: false
+    exec: upgit -c <upgit配置文件路径> -t /artalk-img
+    del_local: true
+
+email:
+  enabled: false
+  send_type: smtp
+  send_name: "{{reply_nick}}"
+  send_addr: noreply@example.com
+  mail_subject: "[{{site_name}}] 您收到了来自 @{{reply_nick}} 的回复"
+  mail_tpl: default
+  smtp:
+    host: ""
+    port: ""
+    username: ""
+    password: ""
+
+admin_notify:
+  notify_tpl: default
+  notify_pending: false
+  noise_mode: false
+  email:
+    enabled: false
+    mail_subject: "[{{site_name}}] 您的文章「{{page_title}}」有新回复"
+    mail_tpl: ""
+  lark:
+    enabled: false
+    webhook_url: ""
+    msg_type: "text"
+
+auth:
+  enabled: false
+  anonymous: false
+  callback: ""
+  email:
+    enabled: false
+    verify_subject: "您的验证码是 - {{code}}"
+    verify_tpl: default
+  github:
+    enabled: false
+    client_id: ""
+    client_secret: ""
+
+frontend:
+  placeholder: ""
+  noComment: ""
+  sendBtn: ""
+  editorTravel: true
+  emoticons: https://cdn.klyang.com/json/emo.json
+  vote: true
+  voteDown: false
+  uaBadge: false
+  listSort: true
+  preview: true
+  flatMode: auto
+  darkMode: inherit
+  nestMax: 2
+  nestSort: DATE_ASC
+  gravatar:
+    mirror: https://weavatar.com/avatar/
+    params: sha256=1&d=mp&s=240
+  pagination:
+    pageSize: 20
+    readMore: true
+    autoLoad: true
+  heightLimit:
+    content: 300
+    children: 400
+    scrollable: false
+  imgLazyLoad: false
+  reqTimeout: 15000
+  versionCheck: true
+  pluginURLs: []
