@@ -2,6 +2,11 @@
 
 UUID=${UUID:-"$(uuidgen)"}
 
+if [ ! -e /run/openrc/softlevel ]; then
+    mkdir -p /run/openrc
+    touch /run/openrc/softlevel
+fi
+
 # first run
 if [ ! -e /data/.install ]; then
 

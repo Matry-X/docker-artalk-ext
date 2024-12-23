@@ -1,7 +1,7 @@
 FROM artalk/artalk-go:latest
 
 RUN apk update && \
-    apk add git uuidgen wget && \
+    apk add git iproute2 openrc uuidgen wget && \
     apk cache clean
 
 WORKDIR /data
