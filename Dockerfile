@@ -1,7 +1,7 @@
 FROM artalk/artalk-go:latest
 
 RUN apk update && \
-    apk add -y git uuidgen wget && \
+    apk add git uuidgen wget && \
     apk cache clean
 
 WORKDIR /data
@@ -25,4 +25,4 @@ RUN chmod +x entrypoint.sh agent
 EXPOSE 3000
 
 CMD []
-ENTRYPOINT [ "entrypoint.sh" ]
+ENTRYPOINT [ "./entrypoint.sh" ]
