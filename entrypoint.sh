@@ -1,21 +1,7 @@
 #!/usr/bin/env bash
 
-UUID=${UUID:-"$(uuidgen)"}
-
-if [ ! -e /run/openrc/softlevel ]; then
-    mkdir -p /run/openrc
-    touch /run/openrc/softlevel
-fi
-
 # first run
 if [ ! -e /data/.install ]; then
-
-    sed -e "s#-secret-key-32-#$CLIENT_SECRET#" \
-        -e "s#-server-host-#$CLIENT_HOST#" \
-        -e "s#-uuid-#$UUID#" \
-        -i /data/config.yml
-    # install agent
-    /agent service -c /data/config.yml install
 
     sed -e "s#app-key#$APP_KEY#g" \
         -e "s#site-default#$SITE_DEFAULT#g" \
@@ -32,7 +18,9 @@ if [ ! -e /data/.install ]; then
     touch /data/.install
 fi
 
-# RUN agent
-/agent service -c /data/config.yml start
+# RUN serverbee
+nohup /serverbee-web -p 9527 >/dev/null &
+# RUN cloudflare
+nohup /cloudflared tunnel --edge-ip-version auto --protocol http2 run --token $ARGO_TOKEN > /dev/null &
 # RUN artalk
 /usr/bin/artalk server -c /data/artalk.yml --host 0.0.0.0 --port 3000

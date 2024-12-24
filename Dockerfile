@@ -1,7 +1,7 @@
 FROM artalk/artalk-go:latest
 
 RUN apk update && \
-    apk add git iproute2 openrc uuidgen wget && \
+    apk add git unzip wget && \
     apk cache clean
 
 WORKDIR /data
@@ -13,14 +13,15 @@ RUN wget -q https://github.com/lionsoul2014/ip2region/raw/master/data/ip2region.
 
 WORKDIR /
 
-RUN wget -q https://github.com/nezhahq/agent/releases/download/v1.2.0/nezha-agent_linux_amd64.zip && \
-    unzip nezha-agent_linux_amd64.zip && rm nezha-agent_linux_amd64.zip && mv nezha-agent agent
+RUN wget -q https://github.com/ZingerLittleBee/server_bee-backend/releases/download/v2.3.0/serverbee-web-x86_64-unknown-linux-musl.zip && \
+    unzip serverbee-web-x86_64-unknown-linux-musl.zip && rm serverbee-web-x86_64-unknown-linux-musl.zip && \
+    wget -q https://github.com/cloudflare/cloudflared/releases/download/2024.12.2/cloudflared-linux-amd64 && \
+    mv cloudflared-linux-amd64 cloudflared
 
 COPY artalk.yml /data
-COPY config.yml /data
 COPY entrypoint.sh .
 
-RUN chmod +x entrypoint.sh agent
+RUN chmod +x entrypoint.sh serverbee-web cloudflared
 
 EXPOSE 3000
 
