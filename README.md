@@ -19,9 +19,7 @@ docker build -t your-tag .
 
 ```bash
 docker run -d \
-  -e CLIENT_HOST='nezha.example.com:443' \
-  -e CLIENT_SECRET='zk****ol' \
-  -e UUID='xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' \
+  -e ARGO_TOKEN='ey****J9' \
   -e APP_KEY='abcd****wxyz' \
   -e SITE_DEFAULT='Default Artalk' \
   -e SITE_URL='artalk.example.com' \
