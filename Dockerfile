@@ -14,9 +14,9 @@ RUN chmod +x /agent
 
 EXPOSE 80
 
-CMD (sed -e "s#-secret-key-32-#$CLIENT_SECRET#" -e "s#-server-host-#$CLIENT_HOST#" -e "s#-uuid-#$UUID#" -i ${DATA_DIR}/config.agent.yml && \
+CMD sed -e "s#-secret-key-32-#$CLIENT_SECRET#" -e "s#-server-host-#$CLIENT_HOST#" -e "s#-uuid-#$UUID#" -i ${DATA_DIR}/config.agent.yml && \
     /agent service -c /config.agent.yml install && \
     /agent service -c /config.agent.yml start && \
-    [ -z "$CRON_MIN" ] || cron) && \
+    ([ -z "$CRON_MIN" ] || cron) && \
 	. /etc/apache2/envvars && \
 	exec apache2 -D FOREGROUND $([ -n "$OIDC_ENABLED" ] && [ "$OIDC_ENABLED" -ne 0 ] && echo '-D OIDC_ENABLED')
