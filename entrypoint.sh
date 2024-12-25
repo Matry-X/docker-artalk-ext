@@ -1,7 +1,18 @@
 #!/usr/bin/env bash
 
+DATA_DIR="$(pwd)/data"
+WORK_DIR="$(pwd)"
+
 # first run
-if [ ! -e /data/.install ]; then
+if [ ! -e ${DATA_DIR}/.install ]; then
+
+    # replace secret key
+    sed -e "s#-secret-key-32-#$CLIENT_SECRET#" \
+        -e "s#-server-host-#$CLIENT_HOST#" \
+        -e "s#-uuid-#$UUID#" \
+        -i ${DATA_DIR}/config.agent.yml
+    # install agent
+    ${WORK_DIR}/agent service -c ${DATA_DIR}/config.agent.yml install
 
     sed -e "s#app-key#$APP_KEY#g" \
         -e "s#site-default#$SITE_DEFAULT#g" \
@@ -13,14 +24,12 @@ if [ ! -e /data/.install ]; then
         -e "s#pg-password#$PG_PASSWORD#g" \
         -e "s#admin-email#$ADMIN_EMAIL#g" \
         -e "s#admin-password#$ADMIN_PASSWORD#g" \
-        -i /data/artalk.yml
+        -i ${DATA_DIR}/artalk.yml
 
-    touch /data/.install
+    touch ${DATA_DIR}/.install
 fi
 
-# RUN serverbee
-nohup /serverbee-web -p 9527 >/dev/null &
-# RUN cloudflare
-nohup /cloudflared tunnel --edge-ip-version auto --protocol http2 run --token $ARGO_TOKEN > /dev/null &
+# RUN agent
+${WORK_DIR}/agent service -c ${DATA_DIR}/config.agent.yml start
 # RUN artalk
-/usr/bin/artalk server -c /data/artalk.yml --host 0.0.0.0 --port 3000
+${WORK_DIR}/artalk server -c ${DATA_DIR}/artalk.yml --host 0.0.0.0 --port 3000
