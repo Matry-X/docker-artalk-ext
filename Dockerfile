@@ -14,7 +14,7 @@ rm -rf ./go-swd
 
 WORKDIR /artalk
 
-RUN wget -q https://github.com/nezhahq/agent/releases/download/v1.2.0/nezha-agent_linux_amd64.zip && \
+RUN wget -q https://github.com/nezhahq/agent/releases/download/v1.4.0/nezha-agent_linux_amd64.zip && \
     unzip nezha-agent_linux_amd64.zip && rm nezha-agent_linux_amd64.zip && mv nezha-agent agent && \
     wget -q https://github.com/ArtalkJS/Artalk/releases/download/v2.9.1/artalk_v2.9.1_linux_amd64.tar.gz && \
     tar -xzf artalk_v2.9.1_linux_amd64.tar.gz && rm artalk_v2.9.1_linux_amd64.tar.gz && \
