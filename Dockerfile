@@ -1,22 +1,27 @@
-FROM freshrss/freshrss:latest
+FROM debian:bookworm-slim
 
 RUN apt-get update && \
-    apt-get install -y iproute2 sed unzip wget && \
+    apt-get install -yq ca-certificates iproute2 sed supervisor unzip wget && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN wget -q https://github.com/nezhahq/agent/releases/download/v1.2.0/nezha-agent_linux_amd64.zip && \
-    unzip nezha-agent_linux_amd64.zip && rm nezha-agent_linux_amd64.zip && mv nezha-agent /agent
+WORKDIR /app
 
-COPY config.agent.yml /
+RUN wget -q https://github.com/nezhahq/agent/releases/download/v1.4.0/nezha-agent_linux_amd64.zip && \
+    unzip nezha-agent_linux_amd64.zip && rm nezha-agent_linux_amd64.zip && mv nezha-agent agent && \
+    wget -q https://github.com/stalwartlabs/mail-server/releases/download/v0.10.7/stalwart-mail-x86_64-unknown-linux-gnu.tar.gz && \
+    tar -xzf stalwart-mail-x86_64-unknown-linux-gnu.tar.gz && rm stalwart-mail-x86_64-unknown-linux-gnu.tar.gz && \
+    wget -q https://github.com/fatedier/frp/releases/download/v0.61.1/frp_0.61.1_linux_amd64.tar.gz && \
+    tar -xzf frp_0.61.1_linux_amd64.tar.gz && rm frp_0.61.1_linux_amd64.tar.gz && \
+    mv frp_0.61.1_linux_amd64/frpc . && rm -rf frp_0.61.1_linux_amd64
 
-RUN chmod +x /agent
+COPY config.agent.yml .
+COPY damon.conf .
+COPY frpc.toml .
+COPY entrypoint.sh .
 
-EXPOSE 80
+RUN chmod +x agent entrypoint.sh frpc stalwart-mail
 
-CMD sed -e "s#-secret-key-32-#$CLIENT_SECRET#" -e "s#-server-host-#$CLIENT_HOST#" -e "s#-uuid-#$UUID#" -i ${DATA_DIR}/config.agent.yml && \
-    /agent service -c /config.agent.yml install && \
-    /agent service -c /config.agent.yml start && \
-    ([ -z "$CRON_MIN" ] || cron) && \
-	. /etc/apache2/envvars && \
-	exec apache2 -D FOREGROUND $([ -n "$OIDC_ENABLED" ] && [ "$OIDC_ENABLED" -ne 0 ] && echo '-D OIDC_ENABLED')
+EXPOSE 3000
+
+ENTRYPOINT [ "/app/entrypoint.sh" ]

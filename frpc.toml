@@ -1,0 +1,26 @@
+serverAddr = "-server-addr-"
+serverPort = -server-port-
+user = "-user-id-"
+auth.token = "-user-token-"
+dnsServer = "1.0.0.1"
+transport.protocol = "tcp"
+transport.tcpMux  = true
+transport.tls.enable = false
+[[proxies]]
+name = "SMTP-465"
+type = "tcp"
+localIP = "127.0.0.1"
+localPort = 465
+remotePort = -smtp-port-ssl-
+[[proxies]]
+name = "SMTP-587"
+type = "tcp"
+localIP = "127.0.0.1"
+localPort = 587
+remotePort = -smtp-port-tls-
+[[proxies]]
+name = "IMAP"
+type = "tcp"
+localIP = "127.0.0.1"
+localPort = 993
+remotePort = -imap-port-
