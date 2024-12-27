@@ -23,25 +23,24 @@ COPY config.agent.yml /app
 COPY damon.conf /etc/supervisor/conf.d/damon.conf
 COPY frpc.toml /app
 
-RUN sed -e "s#-secret-key-32-#$CLIENT_SECRET#" \
-        -e "s#-server-host-#$CLIENT_HOST#" \
-        -e "s#-uuid-#$UUID#" \
-        -i /app/config.agent.yml && \
-    sed -e "s#-server-addr-#$SERVER_ADDR#" \
-        -e "s#-server-port-#$SERVER_PORT#" \
-        -e "s#-user-id-#$USER_ID#" \
-        -e "s#-user-token-#$USER_TOKEN#" \
-        -e "s#-smtp-port-ssl-#$SMTP_PORT_SSL#" \
-        -e "s#-smtp-port-tls-#$SMTP_PORT_TLS#" \
-        -e "s#-imap-port-#$IMAP_PORT#" \
-        -i /app/frpc.toml && \
-    /app/agent service -c /app/config.agent.yml install && \
-    /app/stalwart-mail --init /app/data && \
-
+RUN /app/stalwart-mail --init /app/data
 
 EXPOSE 80 8080 465 587 993
 
-CMD /agent service -c /config.agent.yml start && \
+CMD sed -e "s#-secret-key-32-#$CLIENT_SECRET#" \
+    -e "s#-server-host-#$CLIENT_HOST#" \
+    -e "s#-uuid-#$UUID#" \
+    -i /app/config.agent.yml && \
+    sed -e "s#-server-addr-#$SERVER_ADDR#" \
+    -e "s#-server-port-#$SERVER_PORT#" \
+    -e "s#-user-id-#$USER_ID#" \
+    -e "s#-user-token-#$USER_TOKEN#" \
+    -e "s#-smtp-port-ssl-#$SMTP_PORT_SSL#" \
+    -e "s#-smtp-port-tls-#$SMTP_PORT_TLS#" \
+    -e "s#-imap-port-#$IMAP_PORT#" \
+    -i /app/frpc.toml && \
+    /app/agent service -c /app/config.agent.yml install && \
+    /app/agent service -c /app/config.agent.yml start && \
     supervisord -c /etc/supervisor/supervisord.conf && \
     ([ -z "$CRON_MIN" ] || cron) && \
 	. /etc/apache2/envvars && \
