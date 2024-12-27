@@ -1,13 +1,12 @@
-# docker-nezha-linkwarden
+# docker-nezha-freeshrss
 
 ## HOW TO USE
 
 ### build
 
 ```bash
-git clone https://github.com/Matry-X/docker-artalk-ext.git#linkwarden
+git clone https://github.com/Matry-X/docker-artalk-ext.git#freshrss
 cd docker-artalk-ext
-nano .env # or vi .env, edit .env
 docker build -t your-tag .
 ```
 
@@ -18,13 +17,13 @@ docker run -d \
   -e CLIENT_HOST='nezha.example.com:443' \
   -e CLIENT_SECRET='dcba****zyxw' \
   -e UUID='xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' \
-  -e DATABASE_URL="postgresql://postgres:passwrord@postgres:5432/postgres" \
-  --env-file .env \
-  --name "linkwarden" \
+  -e TZ="Asia/Shanghai" \
+  -e CRON_MIN="*/120" \
+  --name "freshrss" \
   your-tag:latest
 ```
 
 ## INSPIRATION
 
-[linkwarden/linkwarden](https://github.com/linkwarden/linkwarden)  
+[FreshRSS/FreshRSS](https://github.com/FreshRSS/FreshRSS)  
 [nezhahq/agent](https://github.com/nezhahq/agent)  
