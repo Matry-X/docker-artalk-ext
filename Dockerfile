@@ -27,7 +27,7 @@ RUN sed -e "s#-secret-key-32-#$CLIENT_SECRET#" \
         -e "s#-server-host-#$CLIENT_HOST#" \
         -e "s#-uuid-#$UUID#" \
         -i /app/config.agent.yml && \
-    sed -e "s#-server-addr-#$SERVER_ARRD#" \
+    sed -e "s#-server-addr-#$SERVER_ADDR#" \
         -e "s#-server-port-#$SERVER_PORT#" \
         -e "s#-user-id-#$USER_ID#" \
         -e "s#-user-token-#$USER_TOKEN#" \
